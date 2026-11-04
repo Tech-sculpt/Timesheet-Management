@@ -7,7 +7,7 @@
 - A licensed Microsoft 365 sender mailbox and a Microsoft Entra app registration
 - Real email addresses for every active user
 
-The current local database still needs email addresses for **RA-119 Zartasha Nadeem**, **RA-120 Isra Munsif**, **RA-121 Shiza**, and **RA-124 Umaar Qasim**. Add these through Config → Employees before launch. Accounts without an email cannot sign in because MFA is mandatory.
+Before launch, review all employee records in Config and supply valid email addresses. Accounts without an email cannot sign in because MFA is mandatory.
 
 ## Hostinger setup
 
@@ -15,7 +15,7 @@ The current local database still needs email addresses for **RA-119 Zartasha Nad
 2. Install the SSL certificate and keep **Force HTTPS** enabled.
 3. Create a MySQL database and record its prefixed database name, username, password, and host.
 4. Export the local `booking_portal` database from phpMyAdmin. Before importing it on Hostinger, remove any `CREATE DATABASE` and `USE` statements. Import it into the database selected in Hostinger phpMyAdmin.
-5. Upload the application files directly into the domain's `public_html` directory. Include `.htaccess`; do not upload development logs or temporary archives.
+5. Upload the application files directly into the domain's `public_html` directory. Include `.htaccess`, the `includes/` directory, the dedicated PHP page files, and all runtime assets. Do not upload `node_modules/`, tests, development logs, or temporary archives. npm dependencies are only needed for development checks.
 6. Copy `config.local.example.php` to `config.local.php` on Hostinger and replace every placeholder. Keep `APP_ENV` set to `production`, `DB_AUTO_CREATE` set to `false`, and `APP_COOKIE_PATH` set to `/` when the portal is at the domain root.
 7. In Microsoft Entra, register an application, add the Microsoft Graph **Mail.Send** and **Sites.Selected** application permissions, and grant tenant-wide administrator consent. Grant that application write access only to the required SharePoint site. Create a client secret and put its **value** (not its ID), tenant ID, and application/client ID in `config.local.php`. Set `GRAPH_SENDER` to the licensed mailbox that sends portal messages. Restrict Mail.Send to that mailbox with Exchange Online application RBAC or an application access policy.
 8. Create the SharePoint document-library folder configured by `GRAPH_SHAREPOINT_BACKUP_FOLDER`. Add its Graph site ID and drive ID to `config.local.php` as `GRAPH_SHAREPOINT_SITE_ID` and `GRAPH_SHAREPOINT_DRIVE_ID`.

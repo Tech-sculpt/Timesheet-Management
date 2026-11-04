@@ -1,0 +1,17 @@
+{
+  "indent_size": 4,
+  "wrap_line_length": 100,
+  "extra_liners": [],
+  "inline": [],
+  "unformatted": [],
+  "content_unformatted": [
+    "pre",
+    "textarea",
+    "script",
+    "style"
+  ],
+  "templating": [
+    "php"
+  ],
+  "end_with_newline": true
+}

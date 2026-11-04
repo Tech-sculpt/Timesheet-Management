@@ -14,6 +14,11 @@ ServerSignature Off
 
 RewriteEngine On
 
+# Block version-control metadata, tooling, and test sources.
+RewriteRule (^|/)\.(git|github|idea|vscode)(/|$) - [F,L,NC]
+RewriteRule ^\.(editorconfig|gitattributes|gitignore)$ - [F,L,NC]
+RewriteRule ^(?:tests|includes)(?:/|$) - [F,L,NC]
+
 # Redirect direct PHP page visits to the extensionless URL.
 # Only redirect GET and HEAD requests, not submitted POST forms.
 # Use 302 during testing; change to 301 after testing successfully.
