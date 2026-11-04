@@ -13,3 +13,14 @@
 /reference_data.tsv
 /resource-booking-tracker-timesheet-export*.html
 /backups/
+
+# Editor and OS files
+/.idea/
+/.vscode/
+.DS_Store
+Thumbs.db
+
+# Dependency and coverage output
+/node_modules/
+/vendor/
+/coverage/

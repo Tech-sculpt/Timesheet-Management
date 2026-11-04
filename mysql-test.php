@@ -1,28 +1,22 @@
 <?php
+declare(strict_types=1);
 
-header('Content-Type: text/plain');
+// Keep connection diagnostics off the public website.
+if (PHP_SAPI !== 'cli') {
+    http_response_code(404);
+    exit();
+}
 
-$host = '115.186.137.226';
-$port = 43306;
-$db   = 'Timecaptain';
-$user = 'timecaptain_app';
-$pass = 'AcScAdmin@1010';
+require __DIR__ . '/config.php';
 
 try {
-    $pdo = new PDO(
-        "mysql:host={$host};port={$port};dbname={$db};charset=utf8mb4",
-        $user,
-        $pass,
-        [
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-            PDO::ATTR_TIMEOUT => 10
-        ]
+    db()->query('SELECT 1');
+    fwrite(STDOUT, "Database connection successful.\n");
+} catch (Throwable $error) {
+    // Connection exceptions can contain hostnames and credentials.
+    fwrite(
+        STDERR,
+        "Database connection failed. Check your local database configuration and service.\n",
     );
-
-    echo "SUCCESS\n";
-    echo "Connected to Timecaptain database on local Windows Server.\n";
-
-} catch (PDOException $e) {
-    echo "CONNECTION FAILED\n";
-    echo "Error: " . $e->getMessage();
+    exit(1);
 }

@@ -1,0 +1,32 @@
+name: Project checks
+
+on: [push, pull_request]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          coverage: none
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Install test dependencies
+        run: npm ci --ignore-scripts
+      - name: Check source formatting
+        run: npm run format:check
+      - name: Check PHP syntax
+        run: find . -type f -name '*.php' -not -path './.git/*' -not -path './node_modules/*' -print0 | xargs -0 -n1 php -l
+      - name: Check application JavaScript syntax
+        run: |
+          node --check assets/portal.js
+          node --check assets/workbook-calculations.js
+      - name: Check independent pages and workbook calculations
+        run: npm test
