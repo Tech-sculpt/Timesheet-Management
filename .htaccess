@@ -1,0 +1,30 @@
+# Disable directory listing and automatic filename negotiation
+Options -Indexes -MultiViews
+ServerSignature Off
+
+# Protect sensitive application files
+<FilesMatch "^(config\.php|config\.local\.php|config\.local\.example\.php|mailer\.php|database\.sql|booking_portal\.sql|reference_data\.tsv|README\.md|HOSTINGER_DEPLOYMENT\.md)$">
+    Require all denied
+</FilesMatch>
+
+# Protect logs, configuration files, backups and archives
+<FilesMatch "\.(log|ini|env|bak|backup|old|dist|zip|tar|gz|7z)$">
+    Require all denied
+</FilesMatch>
+
+RewriteEngine On
+
+# Redirect direct PHP page visits to the extensionless URL.
+# Only redirect GET and HEAD requests, not submitted POST forms.
+# Use 302 during testing; change to 301 after testing successfully.
+RewriteCond %{REQUEST_METHOD} ^(GET|HEAD)$
+RewriteCond %{THE_REQUEST} "\s/+[^?\s]*\.php(?:[?\s])" [NC]
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteRule ^(.+)\.php$ /$1 [R=302,L]
+
+# Internally serve the matching PHP file for an extensionless URL.
+# Leave existing files and directories unchanged.
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}.php -f
+RewriteRule ^(.+)$ $1.php [L]
